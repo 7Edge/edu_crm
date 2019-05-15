@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block body_content %}
+    <h3>{{ cou_obj }} 课堂作业批改</h3>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-9 col-md-offset-1">
+                <form action="" method="post">
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th>学生</th>
+                            <th>成绩</th>
+                            <th>评语</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for sr_obj in sr_qs_list %}
+                            <tr>
+                                <td>{{ sr_obj }}</td>
+                                <td>
+                                    <select class="form-control" name="score_{{ sr_obj.id }}" id="">
+                                        {% for ele in score_choices %}
+                                            {% if ele.0 == sr_obj.score %}
+                                                <option value="{{ ele.0 }}" selected>{{ ele.1 }}</option>
+                                            {% else %}
+                                                <option value="{{ ele.0 }}">{{ ele.1 }}</option>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </select>
+                                </td>
+                                <td><textarea class="form-control" name="homework_note_{{ sr_obj.id }}" id="" cols="20"
+                                              rows="1">{{ sr_obj.homework_note|default_if_none:'' }}</textarea></td>
+
+                            </tr>
+                        {% endfor %}
+
+                        </tbody>
+                    </table>
+                    <input type="submit" value='提交' class="btn btn-primary pull-right">
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+{% endblock %}

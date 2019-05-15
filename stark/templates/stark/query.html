@@ -1,0 +1,161 @@
+{% extends 'base.html' %}
+
+{% block mycss %}
+    <style>
+        .container {
+            margin-top: 60px;
+        }
+
+        #batch_actions {
+            width: 200px;
+            height: 34px;
+        }
+
+        .filter {
+            margin: 5px 0;
+            padding: 0 15px 15px;
+        }
+
+        .filter li {
+            margin: 0;
+            padding: 1px 0;
+            font-size: 13px;
+        }
+
+        h3.filter_title {
+            font-weight: 400;
+            font-size: 14px;
+            padding: 0 15px;
+            margin-bottom: 10px;
+        }
+
+        #filters hr {
+            margin: 0;
+        }
+
+        #filters a {
+            color: grey;
+            text-decoration-line: none;
+        }
+
+        #filters a:hover {
+            color: royalblue;
+        }
+
+        #filters .active {
+            background-color: greenyellow;
+            border: 1px solid greenyellow;
+            padding: 2px 2px;
+        }
+    </style>
+{% endblock %}
+
+
+
+{% block body_content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 col-md-offset-1">
+                <a href="{{ add_url }}" class="btn btn-primary">新增</a>
+
+                {% if qvc_obj.config_obj.search_fields %}
+                    <form action="" class="pull-right" method="get">
+                        <input type="text" name="search" value="{{ qvc_obj.config_obj.condition_value }}"><input
+                            type="submit" value="Search">
+                    </form>
+                {% endif %}
+
+
+                <form action="" method="post">
+                    {#                    {% if qvc_obj.config_obj.actions %}#}
+                    <select name="batch_action" id="batch_actions">
+                        <option value="">------------------</option>
+                        {% for foo in qvc_obj.get_actions_list %}
+                            <option value="{{ foo.name }}">{{ foo.label_name }}</option>
+                        {% endfor %}
+
+                        {#                    {% endif %}#}
+                    </select><input type="submit" value="GO" class="btn btn-default">
+
+
+                    <h3>{{ model_name|upper }}信息</h3>
+
+
+                    <table class="table table-hover data_list">
+                        <thead>
+                        <tr>
+                            {% for head in t_title_list %}
+                                <th>{{ head }}</th>
+                            {% endfor %}
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        {% for data in data_list %}
+                            <tr>
+                                {% for val in data %}
+                                    <td>{{ val }}</td>
+                                {% endfor %}
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+
+
+                </form>
+
+
+                {#                分页标签#}
+                <ul class="pagination">
+                    {{ pager_html|safe }}
+                </ul>
+
+            </div>
+            {#            过滤#}
+            <div class="col-md-3">
+                {% if qvc_obj.config_obj.filter_list %}
+                    <div class="panel panel-info" id="filters">
+                        <div class="panel-heading">
+                            <div class="panel-title">
+                                FILTER
+                            </div>
+                        </div>
+                        <div class="panel-body">
+                            {% for t_filter in qvc_obj.get_filter_list %}
+                                <h3 class="filter_title"><strong>By {{ t_filter.filter_field }}</strong></h3>
+
+                                <ul type="none" class="filter">
+                                    {% for a in t_filter.a_tag %}
+                                        <li>{{ a|safe }}</li>
+                                    {% endfor %}
+                                </ul>
+                                <hr>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+
+{% block custjs %}
+    <script>
+        $(function () {
+            // 复选框 全选或者全取消
+            $('#all_handle').click(function () {
+                {#console.log($(this).prop('checked'));#}
+                if ($(this).prop('checked')) {
+                    $('table.data_list input[type=checkbox]').prop('checked', true);
+                } else {
+                    $('table.data_list input[type=checkbox]').prop('checked', false);
+                }
+            });
+
+            // 单选框实际状态对 title中复选框的影响
+        });
+    </script>
+{% endblock %}

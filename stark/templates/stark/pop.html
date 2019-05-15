@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>POP</title>
+</head>
+<body>
+<script>
+    var f_window = window.opener;
+    // 通过f_window调用已经定义好的函数。
+    f_window.new_to_selected('{{ back_select_id }}', '{{ new_obj.pk }}', '{{ new_obj }}');
+    // 最后关闭当前window.(注意非pop的窗口是关闭不了自己的)
+    window.close();
+</script>
+</body>
+</html>

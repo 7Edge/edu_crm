@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block head_ref_script %}
+    <script src="{% static 'crm/highcharts/highcharts.js' %}"></script>
+{% endblock %}
+
+{% block body_content %}
+    <div class="container-fluid">
+        {% for key, item in data.items %}
+            <div class="row">
+                <div class="col-md-7">
+                    <table class="table table-bordered">
+                        <thead>
+                        <tr>
+                            <th>课程</th>
+                            <th>分数</th>
+                            <th>评语</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for std_r_obj in item %}
+                            <tr>
+                                <td>{{ std_r_obj.course_record }}</td>
+                                <td>{{ std_r_obj.get_score_display }}</td>
+                                <td>
+                                    <p style="max-width:400px; text-align:center;">{{ std_r_obj.homework_note|default_if_none:'' }}</p>
+                                </td>
+                            </tr>
+
+                        {% endfor %}
+
+                        </tbody>
+
+                    </table>
+                </div>
+                <div class="col-md-5">
+                    <div id="chart_{{ key }}" class='std_record_chart' cls_id='{{ key }}' stdent_id='{{ std_id }}'
+                         style="width:500px; height:400px;"></div>
+                </div>
+
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
+
+{% block custjs %}
+    <script>
+        $(function () {
+            $('.std_record_chart').each(function () {
+                var $temp_this = $(this);
+                $.ajax({
+                    url: '',
+                    type: 'get',
+                    data: {
+                        'cls': $(this).attr('cls_id'),
+                        'std': $(this).attr('stdent_id')},
+                    success: function (data) {
+                        var c_id = $temp_this.prop('id');
+                        Highcharts.chart(c_id, {
+                            title: {
+                                text: '课堂成绩'
+                            },
+                            legend: {
+                                enabled: false
+                            },
+                            xAxis: {
+                                type: 'category',
+                            },
+                            yAxis: {
+                                title: {
+                                    text: '分数'
+                                }
+                            },
+                            plotOptions: {
+                                line: {
+                                    dataLabels: {
+                                        enabled: true
+                                    }
+                                }
+                            },
+                            series: [{
+                                name: '',
+                                data: data
+                            }]
+                        });
+                    }
+                });
+            });
+
+
+        });
+    </script>
+{% endblock %}

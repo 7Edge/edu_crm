@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block body_content %}
+    <h3 style="text-align:center">公共客户资源</h3>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 col-md-offset-3">
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th>序号</th>
+                        <th>客户</th>
+                        <th>QQ</th>
+                        <th>咨询顾问</th>
+                        <th>跟进记录</th>
+                        <th>跟进</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for c_obj in pub_customers %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ c_obj.name }}</td>
+                            <td>{{ c_obj.qq }}</td>
+                            <td>{{ c_obj.consultant }}</td>
+                            <td style="text-align: center;"><a
+                                    href="{% url 'crm_consultrecord_query' %}?customer={{ c_obj.id }}"><span
+                                    style='color: gray;' class="glyphicon glyphicon-comment" aria-hidden="true"></span></a>
+                            </td>
+                            <td><a href="{% url 'obtain_customer' c_obj.id %}">跟进用户</a></td>
+                        </tr>
+                    {% endfor %}
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}

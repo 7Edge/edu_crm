@@ -1,0 +1,54 @@
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+            <div class="panel panel-info" style="margin-top: 100px;">
+                <div class="panel-heading">
+                    <div class="panel-title">
+                        {{ operation_type }} {{ model_name|upper }}
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <form action="" method="post" novalidate>
+                        {% csrf_token %}
+                        {% for f_field in form %}
+                            <div style="position: relative; padding: 8px 50px;">
+                                {{ f_field.label_tag }}
+                                {{ f_field }}
+                                {% if f_field.is_pop %}
+                                    <a onclick="pop_add('{{ f_field.add_url }}')" style="font-size: 35px;color: #bce8f1; position: absolute;
+                                                        top: 40%; right: 2%; text-decoration: none;">+</a>
+                                {% endif %}
+                                {{ f_field.errors.0 }}
+                            </div>
+
+
+                        {% endfor %}
+
+                        <input type="submit" value="提交" class="btn btn-success pull-right"
+                               style="margin-right:60px;margin-top:10px;">
+                    </form>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+</div>
+<script>
+
+    function pop_add(addurl) {
+        var pop_window = window.open(addurl, '', 'width=720px,height=550px,top=70px,left=100px')
+    }
+
+
+    function new_to_selected(select_id, val, label) {
+        var $new_option = $('<option></option>');
+        $new_option.val(val);
+        $new_option.text(label);
+        $new_option.attr('selected', 'selected');
+        $('#' + select_id).prepend($new_option);
+    }
+
+</script>
+</div>
